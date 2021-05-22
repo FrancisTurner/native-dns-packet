@@ -1,5 +1,5 @@
-native-dns-packet
------------------
+native-node-dns-packet
+----------------------
 
  * `Packet.parse(buffer)` returns an instance of `Packet`
  * `Packet.write(buffer, packet)` writes the given packet into the buffer,
@@ -30,6 +30,10 @@ var Packet = function () {
 ```
 
 ## History
+
+###### 0.1.3 - May 21, 2021
+
+- Change package name for npm, update authors to add FrancisTurner
 
 ###### 0.1.1 - October 5, 2014
 
