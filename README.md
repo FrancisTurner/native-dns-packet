@@ -31,6 +31,10 @@ var Packet = function () {
 
 ## History
 
+###### 0.1.4 - May 21, 2021
+
+- Update urls in package.json to be correct
+
 ###### 0.1.3 - May 21, 2021
 
 - Change package name for npm, update authors to add FrancisTurner
