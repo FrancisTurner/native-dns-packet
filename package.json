@@ -1,6 +1,6 @@
 {
   "name": "native-node-dns-packet",
-  "version": "0.1.4",
+  "version": "0.1.5",
   "authors": [
     "Francis Turner <francis.turner@gmail.com>",
     "Timothy J Fontaine <tjfontaine@gmail.com> (http://atxconsulting.com)",

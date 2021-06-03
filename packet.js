@@ -182,6 +182,37 @@ function writeHeader(buff, packet) {
 }
 
 function writeTruncate(buff, packet, section, val) {
+  // From here to the "return" statement is a temporary patch that suffices
+  // until the "XXX FIXME TODO" issue below is fixed.  When that's fixed,
+  // remove these lines.
+  //
+  // The RFC says that when the UDP response overflows, we should start
+  // dropping sections, starting from the end section (which may be
+  // optional info), until it fits, then set the TC bit if we've dropped
+  // essential data.  However, the code below that tries to match the RFC's
+  // requirements is incomplete and throws an exception.
+  //
+  // Well-behaved clients retry via TCP when they see the TC bit.  So a
+  // quick-and-dirty approach is to recreate the buffer, and write a new
+  // copy of the header with the TC bit set, and then end the response.
+  // This allows well-behaved clients to carry on and retry with TCP.
+  //
+  // Yes, there will be circumstances where the essential response data
+  // would fit and we could have dropped the optional response data, saving
+  // the retry.  But, until this code is properly fixed, it's much better
+  // to respond a bit inefficiently instead of leaving the client hanging
+  // with no response at all.
+  buff = new BufferCursor(buff.buffer);
+  writeHeader(buff, packet);
+  const savedPosition = buff.tell();
+  buff.seek(2);
+  val = buff.readUInt16BE();
+  val |= (1 << 9) & 0x200;
+  buff.seek(2);
+  buff.writeUInt16BE(val);
+  buff.seek(savedPosition);
+  return WRITE_END;
+
   // XXX FIXME TODO truncation is currently done wrong.
   // Quote rfc2181 section 9
   // The TC bit should not be set merely because some extra information
